@@ -3,7 +3,10 @@ import React from "react";
 const Header = () => {
   return (
     <header>
-      <h2>Header</h2>
+      <a href="/">Avtozoomadmin</a>
+      <div>
+        
+      </div>
     </header>
   );
 };
