@@ -1,74 +1,62 @@
-import React from "react";
-// import useAuth from "../../service/auth/useAuth";
+import React, { useState } from "react";
+import styles from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
-import { Button, message, Form, Input } from "antd";
 
-const Login = () => {
-  const navigate = useNavigate();
+function Login() {
+  const [data, setData] = useState({ phone_number: "", password: "" });
+  const [error, setError] = useState(null);
+  let navigate = useNavigate();
 
-//   const sendData = (phone_number, password) => {
-//     useAuth
-//       .login({ phone_number, password })
-//       .then((res) => {
-//         navigate("/");
-//         localStorage.setItem(
-//           "accessToken",
-//           res.data.data.tokens.accessToken.token
-//         );
-//         message.success("You are now signed in!");
-//       })
-//       .catch((err) => {
-//         message.error(`Failed to login! ${err.response.data.message}`);
-//       });
-//   };
-
-  const onFinish = (values) => {
-    // sendData(values.username, values.password);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        "https://autoapi.dezinfeksiyatashkent.uz/api/auth/signin",
+        {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("sign-in failed");
+      }
+      const responseData = await response.json();
+      localStorage.setItem(
+        "access_token",
+        responseData.data?.tokens?.accessToken?.token
+      );
+      navigate("/");
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
-    <div className="w-full h-screen flex items-center justify-center">
-      <div className="shadow-lg px-10 py-5 hover:shadow-xl duration-300">
-        <Form
-          name="basic"
-          style={{ width: 600 }}
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-          layout="vertical"
-        >
-          <Form.Item
-            label="Phone number"
-            name="username"
-            rules={[
-              { required: true, message: "Please input your phone number!" },
-            ]}
-          >
-            <Input type="number" />
-          </Form.Item>
-
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
-          >
-            <Input.Password />
-          </Form.Item>
-
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
-    </div>
+    <form onSubmit={handleSubmit} className={styles["form-container"]}>
+      <input
+        type="text"
+        name="phoneNumber"
+        value={data.phone_number}
+        onChange={(e) => setData({ ...data, phone_number: e.target.value })}
+        className={styles["input-field"]}
+        placeholder="Phone Number"
+      />
+      <input
+        type="password"
+        name="password"
+        value={data.password}
+        onChange={(e) => setData({ ...data, password: e.target.value })}
+        className={styles["input-field"]}
+        placeholder="Password"
+      />
+      <button type="submit" className={styles["submit-btn"]}>
+        Submit
+      </button>
+    </form>
   );
-};
+}
 
 export default Login;
