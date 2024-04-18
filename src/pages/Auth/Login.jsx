@@ -30,10 +30,10 @@ function Login() {
         "access_token",
         responseData.data?.tokens?.accessToken?.token
       );
-      toast.success("Ma'lumotlar muvaffaqiyatli yuborildi");
+      toast.success("Kirish muvafaqiyatli");
       navigate("/");
     } catch (error) {
-      toast.error("Malumotingiz yuborishda hatolik yuz berdi!");
+      toast.error("Parol yoki Login noto'gri !");
       setError(error.message);
     }
   };
