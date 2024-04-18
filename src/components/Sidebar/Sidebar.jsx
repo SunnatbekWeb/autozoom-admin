@@ -31,6 +31,14 @@ const Sidebar = () => {
             Brands
           </NavLink>
         </Menu.Item>
+        <Menu.Item
+          key="/cities"
+          icon={<FaShopify style={{ fontSize: "20px" }} />}
+        >
+          <NavLink to="/cities" rel="noopener noreferrer">
+            Cities
+          </NavLink>
+        </Menu.Item>
       </Menu>
     </>
   );

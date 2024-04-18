@@ -1,0 +1,66 @@
+.delete-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: rgb(158, 16, 16);
+}
+
+.update-btn {
+  display: block;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #526aee;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.update-btn:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+.download-input {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #009688;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.download-input:hover {
+  background-color: #00796b;
+}
+
+.download-input:active {
+  background-color: #004d40;
+}
+
+.add-btn {
+  display: block;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #40a9ff;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background-color: #40a9ff;
+}
+
+.add-btn:focus {
+  outline: none;
+}

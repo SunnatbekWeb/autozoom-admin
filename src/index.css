@@ -17,6 +17,7 @@ body {
   display: block;
   margin: 0 auto;
   height: 100vh;
+  padding: 0 1px;
 }
 
 .main-container {
@@ -25,7 +26,7 @@ body {
 
 .active {
   .ant-menu-item-selected {
-    background: #EABF9F !important;
+    background: #eabf9f !important;
     border-radius: 0px !important;
     margin: 0 !important;
     width: 100% !important;
@@ -42,9 +43,8 @@ aside {
   }
 
   .ant-menu-inline {
-    background: #01384D !important;
+    background: #01384d !important;
   }
-
 
   .ant-menu-title-content {
     font-size: 18px !important;
@@ -58,7 +58,7 @@ aside {
   }
 
   .ant-menu-item-selected {
-    background: #EABF9F !important;
+    background: #eabf9f !important;
     border-radius: 0px !important;
     margin: 0 !important;
     width: 100% !important;

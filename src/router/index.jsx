@@ -5,6 +5,7 @@ import Error from "../pages/Error/Error";
 import Dashborad from "../pages/Dashboard/Dashborad";
 import Login from "../pages/Auth/Login";
 import Brand from "../pages/Brand/Brand";
+import Cities from "../pages/Cities/Cities";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: "/brands",
         element: <Brand />,
+      },
+      {
+        path: "/cities",
+        element: <Cities />,
       },
     ],
   },

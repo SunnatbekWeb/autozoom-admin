@@ -5,13 +5,18 @@
   align-items: center;
   width: 400px;
   height: 500px;
+  margin: 100px auto;
   background-color: #f3f4f6;
   border-radius: 0.75rem;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+.toastify {
+  margin: 0 auto;
+}
+
 .input-field {
-  border: 1px solid #d1d5db;
+  border: 1px solid #878c94;
   border-radius: 0.375rem;
   padding: 1rem;
   width: 80%;
