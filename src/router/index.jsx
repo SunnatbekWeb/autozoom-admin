@@ -4,6 +4,7 @@ import App from "../App";
 import Error from "../pages/Error/Error";
 import Dashborad from "../pages/Dashboard/Dashborad";
 import Login from "../pages/Auth/Login";
+import Brand from "../pages/Brand/Brand";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Dashborad />,
+      },
+      {
+        path: "/brands",
+        element: <Brand />,
       },
     ],
   },

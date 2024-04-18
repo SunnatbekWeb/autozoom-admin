@@ -1,0 +1,35 @@
+header {
+    width: 100%;
+    background: #01384D;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+
+    & a {
+        font-size: 24px;
+        color: #FFFFFF;
+    }
+
+    & .user {
+        display: flex;
+        align-items: center;
+        column-gap: 10px;
+
+        & .user_icon {
+            background: #FFFFFF;
+            width: fit-content;
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-content: center;
+            border-radius: 50%;
+        }
+
+        & span {
+            color: #FFFFFF;
+            font-size: 20px;
+            font-weight: 600;
+        }
+    }
+}

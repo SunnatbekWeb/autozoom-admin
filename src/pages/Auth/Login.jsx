@@ -40,6 +40,7 @@ function Login() {
 
   return (
     <div className={styles["container"]}>
+      <ToastContainer className={styles["toastify"]} />
       <form onSubmit={handleSubmit} className={styles["form-container"]}>
         <input
           type="text"
