@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styles from "./Login.module.css";
+import { CiUser } from "react-icons/ci";
+import { RiLockPasswordLine } from "react-icons/ri";
+
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -36,22 +39,29 @@ function Login() {
 
   return (
     <form onSubmit={handleSubmit} className={styles["form-container"]}>
-      <input
-        type="text"
-        name="phoneNumber"
-        value={data.phone_number}
-        onChange={(e) => setData({ ...data, phone_number: e.target.value })}
-        className={styles["input-field"]}
-        placeholder="Phone Number"
-      />
-      <input
-        type="password"
-        name="password"
-        value={data.password}
-        onChange={(e) => setData({ ...data, password: e.target.value })}
-        className={styles["input-field"]}
-        placeholder="Password"
-      />
+      <div className="login_input">
+        <CiUser style={{color: 'gray', position: 'absolute', top: '83px', left: '40px', fontSize: '19px'}}/>
+        <input
+          type="text"
+          name="phoneNumber"
+          value={data.phone_number}
+          onChange={(e) => setData({ ...data, phone_number: e.target.value })}
+          className={styles["input-field"]}
+          placeholder={"Phone Number"}
+        />
+      </div>
+
+      <div className="login_input">
+      <RiLockPasswordLine style={{color: 'gray', position: 'absolute', top: '143px', left: '40px', fontSize: '19px'}}/>
+        <input
+          type="password"
+          name="password"
+          value={data.password}
+          onChange={(e) => setData({ ...data, password: e.target.value })}
+          className={styles["input-field"]}
+          placeholder="Password"
+        />
+      </div>
       <button type="submit" className={styles["submit-btn"]}>
         Submit
       </button>
