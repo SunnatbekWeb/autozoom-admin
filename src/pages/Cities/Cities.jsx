@@ -14,7 +14,7 @@ const Cities = () => {
 
   const columns = [
     {
-      title: "Number",
+      title: "ID",
       dataIndex: "number",
       key: "number",
     },
