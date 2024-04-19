@@ -1,7 +1,9 @@
-import { message, Table, Button, Modal, Form, Input } from "antd";
+import { message, Table, Button, Modal, Form, Input, Upload } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import style from "./Cities.module.css";
+import { key } from "localforage";
+import { ImGift } from "react-icons/im";
 
 const Cities = () => {
   const [cities, setCities] = useState([]);
@@ -9,8 +11,15 @@ const Cities = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [selectedCity, setSelectedCity] = useState(null);
+  const urlimage =
+    "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
 
   const columns = [
+    {
+      title: "Number",
+      dataIndex: "number",
+      key: "number",
+    },
     {
       title: "Name",
       dataIndex: "name",
@@ -27,21 +36,34 @@ const Cities = () => {
       key: "images",
     },
     {
-      title: "Actions",
-      dataIndex: "actions",
-      render: (text, record) => (
-        <div className="buttons">
-          <Button type="primary" onClick={() => handleEdit(record)}>
-            Edit
-          </Button>
-          <Button type="dashed" onClick={() => handleDelete(record)}>
-            Delete
-          </Button>
-        </div>
-      ),
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
     },
   ];
-
+  const dataSourse = cities.map((item, index) => ({
+    key: item.id,
+    number: index + 1,
+    name: item.name,
+    text: item.text,
+    images: (
+      <img style={{ width: "100px" }} src={`${urlimage}${item.image_src}`} />
+    ),
+    action: (
+      <>
+        <span style={{ marginRight: "20px" }}>
+          <Button type="primary" onClick={() => handleEdit(item)}>
+            Edit
+          </Button>
+        </span>
+        <span>
+          <Button type="primary" danger onClick={() => handleDelete(item.id)}>
+            Delete
+          </Button>
+        </span>
+      </>
+    ),
+  }));
   const getData = () => {
     setLoading(true);
     axios
@@ -61,19 +83,30 @@ const Cities = () => {
     getData();
   }, []);
 
-  const handleEdit = (record) => {
-    setSelectedCity(record);
+  const handleEdit = (item) => {
+    const imageUrl = `${urlimage}${item.image_src}`;
+    setSelectedCity({
+      name: item.name,
+      text: item.text,
+      images: imageUrl,
+    });
+
     setVisible(true);
-    form.setFieldsValue(record);
+    form.setFieldsValue(item);
   };
 
-  const handleDelete = (record) => {
+  const handleDelete = (id) => {
+    const authToken = localStorage.getItem("access_token");
+    const config = {
+      headers: { Authorization: `Bearer ${authToken}` },
+    };
     Modal.confirm({
       title: "Do you want to delete this city?",
       onOk() {
         axios
           .delete(
-            `https://autoapi.dezinfeksiyatashkent.uz/api/cities/${record.id}`
+            `https://autoapi.dezinfeksiyatashkent.uz/api/cities/${id}`,
+            config
           )
           .then(() => {
             message.success("City deleted successfully");
@@ -94,11 +127,18 @@ const Cities = () => {
   };
 
   const handleOk = () => {
+    const authToken = localStorage.getItem("access_token");
     form.validateFields().then((values) => {
       const formData = new FormData();
-      const name = formData.append(values.name);
-      const text = formData.append(values.tittle);
-      const images = formData.append(values.images);
+      formData.append("name", values.name);
+      formData.append("text", values.text);
+      if (values.images && values.images.length > 0) {
+        values.images.forEach((image) => {
+          if (image && image.originFileObj) {
+            formData.append("images", image.originFileObj, image.name);
+          }
+        });
+      }
       const url = selectedCity
         ? `https://autoapi.dezinfeksiyatashkent.uz/api/cities/${selectedCity.id}`
         : "https://autoapi.dezinfeksiyatashkent.uz/api/cities";
@@ -108,6 +148,7 @@ const Cities = () => {
         url,
         method,
         data: formData,
+        headers: { Authorization: `Bearer ${authToken}` },
       })
         .then(() => {
           message.success(
@@ -130,7 +171,22 @@ const Cities = () => {
     setVisible(false);
     form.resetFields();
   };
+  const beforeUpload = (file) => {
+    const extension = file.name.split(".").pop().toLowerCase();
+    const isJpgorPng =
+      extension === "jpeg" || extension === "jpg" || extension === "png";
+    if (!isJpgorPng) {
+      message.error("Rasm yuklang");
+    }
+    return isJpgorPng;
+  };
 
+  const normFile = (e) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
   return (
     <div className={style["add-container"]}>
       <Button
@@ -144,14 +200,14 @@ const Cities = () => {
       <div style={{ overflowX: "auto" }}>
         <Table
           columns={columns}
-          dataSource={cities}
           loading={loading}
           rowKey="id"
+          dataSource={dataSourse}
         />
       </div>
       <Modal
         title={selectedCity ? "Edit City" : "Add City"}
-        visible={visible}
+        open={visible}
         onOk={handleOk}
         onCancel={handleCancel}
       >
@@ -171,11 +227,23 @@ const Cities = () => {
             <Input.TextArea rows={4} />
           </Form.Item>
           <Form.Item
+            label="Upload Image"
             name="images"
-            label="images"
-            rules={[{ required: true, message: "Please enter the text" }]}
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+            rules={[{ required: true, message: "Please upload an image" }]}
           >
-            <Input.TextArea rows={4} />
+            <Upload
+              customRequest={({ onSuccess }) => {
+                onSuccess("ok");
+              }}
+              beforeUpload={beforeUpload}
+              listType="picture-card"
+            >
+              <div>
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </div>
+            </Upload>
           </Form.Item>
         </Form>
       </Modal>
