@@ -6,12 +6,12 @@ import "./Header.css";
 const Header = () => {
   return (
     <header>
-        <a href="/">Avtozoomadmin</a>
+      <div></div>
       <div className="user">
         <div className="user_icon">
           <FaRegUser />
         </div>
-        <span>John Doe</span>
+        <span>{localStorage.getItem("userName")}</span>
       </div>
     </header>
   );

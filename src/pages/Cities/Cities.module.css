@@ -14,3 +14,9 @@
   align-items: center;
   gap: 30px;
 }
+
+.ant-table-thead {
+  & tr {
+    background: #01384D !important;
+  }
+}

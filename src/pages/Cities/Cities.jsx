@@ -2,8 +2,6 @@ import { message, Table, Button, Modal, Form, Input, Upload } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import style from "./Cities.module.css";
-import { key } from "localforage";
-import { ImGift } from "react-icons/im";
 
 const Cities = () => {
   const [cities, setCities] = useState([]);
@@ -187,16 +185,68 @@ const Cities = () => {
     }
     return e && e.fileList;
   };
+
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "key",
+      className: "thead-bg",
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      className: "thead-bg",
+    },
+    {
+      title: "Text",
+      dataIndex: "text",
+      key: "text",
+      className: "thead-bg",
+    },
+    {
+      title: "Images",
+      dataIndex: "images",
+      key: "images",
+      className: "thead-bg",
+    },
+    {
+      title: (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <span>Actions</span>
+          <Button
+            type="primary"
+            className={style["add-btn"]}
+            onClick={handleAdd}
+            style={{ margin: 0 }}
+          >
+            Add City
+          </Button>
+        </div>
+      ),
+      dataIndex: "actions",
+      render: (text, record) => (
+        <div className="buttons">
+          <Button type="primary" onClick={() => handleEdit(record)}>
+            Edit
+          </Button>
+          <Button type="dashed" onClick={() => handleDelete(record)}>
+            Delete
+          </Button>
+        </div>
+      ),
+      className: "thead-bg",
+    },
+  ];
+
   return (
     <div className={style["add-container"]}>
-      <Button
-        type="primary"
-        className={style["add-btn"]}
-        onClick={handleAdd}
-        style={{ marginBottom: 16 }}
-      >
-        Add City
-      </Button>
       <div style={{ overflowX: "auto" }}>
         <Table
           columns={columns}

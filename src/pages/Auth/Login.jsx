@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from "react";
 import styles from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
@@ -28,8 +29,9 @@ function Login() {
       const responseData = await response.json();
       localStorage.setItem(
         "access_token",
-        responseData.data?.tokens?.accessToken?.token
+        responseData?.data?.tokens?.accessToken?.token
       );
+      localStorage.setItem("userName", responseData?.data?.user?.firstName)
       toast.success("Kirish muvafaqiyatli");
       navigate("/");
     } catch (error) {
