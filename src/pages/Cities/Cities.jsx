@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { message, Table, Button, Modal, Form, Input } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -9,38 +10,6 @@ const Cities = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [selectedCity, setSelectedCity] = useState(null);
-
-  const columns = [
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Text",
-      dataIndex: "text",
-      key: "text",
-    },
-    {
-      title: "Images",
-      dataIndex: "images",
-      key: "images",
-    },
-    {
-      title: "Actions",
-      dataIndex: "actions",
-      render: (text, record) => (
-        <div className="buttons">
-          <Button type="primary" onClick={() => handleEdit(record)}>
-            Edit
-          </Button>
-          <Button type="dashed" onClick={() => handleDelete(record)}>
-            Delete
-          </Button>
-        </div>
-      ),
-    },
-  ];
 
   const getData = () => {
     setLoading(true);
@@ -131,16 +100,67 @@ const Cities = () => {
     form.resetFields();
   };
 
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "key",
+      className: "thead-bg",
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      className: "thead-bg",
+    },
+    {
+      title: "Text",
+      dataIndex: "text",
+      key: "text",
+      className: "thead-bg",
+    },
+    {
+      title: "Images",
+      dataIndex: "images",
+      key: "images",
+      className: "thead-bg",
+    },
+    {
+      title: (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <span>Actions</span>
+          <Button
+            type="primary"
+            className={style["add-btn"]}
+            onClick={handleAdd}
+            style={{ margin: 0 }}
+          >
+            Add City
+          </Button>
+        </div>
+      ),
+      dataIndex: "actions",
+      render: (text, record) => (
+        <div className="buttons">
+          <Button type="primary" onClick={() => handleEdit(record)}>
+            Edit
+          </Button>
+          <Button type="dashed" onClick={() => handleDelete(record)}>
+            Delete
+          </Button>
+        </div>
+      ),
+      className: "thead-bg",
+    },
+  ];
+
   return (
     <div className={style["add-container"]}>
-      <Button
-        type="primary"
-        className={style["add-btn"]}
-        onClick={handleAdd}
-        style={{ marginBottom: 16 }}
-      >
-        Add City
-      </Button>
       <div style={{ overflowX: "auto" }}>
         <Table
           columns={columns}

@@ -6,18 +6,23 @@ import { Menu } from "antd";
 
 import "./Sidebar.css";
 import { FaShopify } from "react-icons/fa6";
+import MenuItem from "antd/es/menu/MenuItem";
 
 const Sidebar = () => {
   const location = useLocation();
+
   return (
     <>
       <Menu
-        style={{ width: 256 }}
+        style={{ width: 256, borderRight: "1px solid #001f2c" }}
         defaultOpenKeys={["sub1"]}
         mode="inline"
         theme="dark"
         selectedKeys={[location.pathname]}
       >
+        <MenuItem style={{ height: "80px" }}>
+          <NavLink to="/">Avtozoomadmin</NavLink>
+        </MenuItem>
         <Menu.Item key="/" icon={<TiHome style={{ fontSize: "20px" }} />}>
           <NavLink to="/" rel="noopener noreferrer">
             Dashboard
