@@ -21,7 +21,7 @@ const Sidebar = () => {
         selectedKeys={[location.pathname]}
       >
         <MenuItem style={{ height: "80px" }}>
-          <NavLink to="/">Avtozoomadmin</NavLink>
+          <NavLink to="/">AutozoomAdmin</NavLink>
         </MenuItem>
         <Menu.Item key="/" icon={<TiHome style={{ fontSize: "20px" }} />}>
           <NavLink to="/" rel="noopener noreferrer">
