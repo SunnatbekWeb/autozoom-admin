@@ -1,202 +1,151 @@
-import { message, Table, Button, Modal, Form, Input } from "antd";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import style from "../Cities/Cities.module.css";
+import { Button, Input, Modal, Select, message, Table } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import style from "./Brand.module.css";
+import axios from "axios";
+import { FiEdit } from "react-icons/fi";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const Brand = () => {
-  const [cities, setCities] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [form] = Form.useForm();
-  const [selectedCity, setSelectedCity] = useState(null);
+  const [bradns, setBrands] = useState([]);
+  const [modal2Open, setModal2Open] = useState(false);
 
-  const getData = () => {
-    setLoading(true);
+  useEffect(() => {
+    getBrands();
+  }, []);
+
+  const getBrands = () => {
     axios
-      .get("https://autoapi.dezinfeksiyatashkent.uz/api/cities")
+      .get("https://autoapi.dezinfeksiyatashkent.uz/api/brands")
       .then((response) => {
-        setCities(response.data.data);
-        setLoading(false);
+        setBrands(response.data?.data);
       })
       .catch((error) => {
-        console.error("Error getting cities.", error);
-        message.error("Error getting cities.");
-        setLoading(false);
+        message.error(error.message);
       });
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  const addBrand = () => {};
 
-  const handleEdit = (record) => {
-    setSelectedCity(record);
-    setVisible(true);
-    form.setFieldsValue(record);
-  };
+  const deleteBrand = (id) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    };
 
-  const handleDelete = (record) => {
     Modal.confirm({
-      title: "Do you want to delete this city?",
+      title: "Do you want to delete this brand?",
       onOk() {
         axios
           .delete(
-            `https://autoapi.dezinfeksiyatashkent.uz/api/cities/${record.id}`
+            `https://autoapi.dezinfeksiyatashkent.uz/api/brands/${id}`,
+            config
           )
-          .then(() => {
-            message.success("City deleted successfully");
-            getData();
+          .then((response) => {
+            message.success("Brand deleted successfully!");
+            getBrands();
           })
           .catch((error) => {
-            console.error("Error deleting city.", error);
-            message.error("Error deleting city.");
+            message.error(error.message);
           });
       },
     });
   };
 
-  const handleAdd = () => {
-    setSelectedCity(null);
-    setVisible(true);
-    form.resetFields();
-  };
-
-  const handleOk = () => {
-    form.validateFields().then((values) => {
-      const formData = new FormData();
-      const name = formData.append(values.name);
-      const text = formData.append(values.tittle);
-      const images = formData.append(values.images);
-      const url = selectedCity
-        ? `https://autoapi.dezinfeksiyatashkent.uz/api/cities/${selectedCity.id}`
-        : "https://autoapi.dezinfeksiyatashkent.uz/api/cities";
-      const method = selectedCity ? "PUT" : "POST";
-
-      axios({
-        url,
-        method,
-        data: formData,
-      })
-        .then(() => {
-          message.success(
-            selectedCity
-              ? "City updated successfully"
-              : "City added successfully"
-          );
-          setVisible(false);
-          form.resetFields();
-          getData();
-        })
-        .catch((error) => {
-          console.error("Error adding/updating city.", error);
-          message.error("Error adding/updating city.");
-        });
-    });
-  };
-
-  const handleCancel = () => {
-    setVisible(false);
-    form.resetFields();
-  };
-
   const columns = [
-    {
-      title: "ID",
-      dataIndex: "key",
-      className: "thead-bg",
-    },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      className: "thead-bg",
-    },
-    {
-      title: "Text",
-      dataIndex: "text",
-      key: "text",
-      className: "thead-bg",
-    },
-    {
-      title: "Images",
-      dataIndex: "images",
-      key: "images",
-      className: "thead-bg",
+      render: (text) => <p>{text}</p>,
     },
     {
       title: (
         <div
+          className="brand-title"
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
           }}
         >
-          <span>Actions</span>
-          <Button
-            type="primary"
-            className={style["add-btn"]}
-            onClick={handleAdd}
-            style={{ margin: 0 }}
-          >
-            Add City
-          </Button>
+          <p>Action</p>
+          <Button onClick={() => setModal2Open(true)}>Add brand</Button>
         </div>
       ),
-      dataIndex: "actions",
-      render: (text, record) => (
-        <div className="buttons">
-          <Button type="primary" onClick={() => handleEdit(record)}>
-            Edit
-          </Button>
-          <Button type="dashed" onClick={() => handleDelete(record)}>
-            Delete
-          </Button>
-        </div>
-      ),
-      className: "thead-bg",
+      dataIndex: "action",
+      key: "action",
     },
   ];
 
+  const data = bradns.map((item, index) => ({
+    key: index,
+    name: item.title,
+    action: (
+      <Select
+        placeholder="Action"
+        style={{
+          width: 120,
+        }}
+        options={[
+          {
+            value: "edit",
+            label: (
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  columnGap: "20px",
+                }}
+              >
+                <FiEdit style={{ fontSize: "16px" }} />
+                Edit
+              </div>
+            ),
+          },
+          {
+            value: "delete",
+            label: (
+              <div
+                onClick={() => deleteBrand(item?.id)}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  columnGap: "20px",
+                }}
+              >
+                <RiDeleteBinLine style={{ fontSize: "16px" }} />
+                Delete
+              </div>
+            ),
+          },
+        ]}
+      />
+    ),
+  }));
+
   return (
-    <div className={style["add-container"]}>
-      <div style={{ overflowX: "auto" }}>
-        <Table
-          columns={columns}
-          dataSource={cities}
-          loading={loading}
-          rowKey="id"
-        />
-      </div>
+    <div className={style["brand_header"]}>
+      <Input
+        addonBefore={<SearchOutlined />}
+        style={{ width: "40%", marginBottom: "40px" }}
+        placeholder="large size"
+      />
+      <Table columns={columns} dataSource={data} />
+
       <Modal
-        title={selectedCity ? "Edit City" : "Add City"}
-        visible={visible}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        title="Vertically centered modal dialog"
+        centered
+        open={modal2Open}
+        onOk={() => setModal2Open(false)}
+        onCancel={() => setModal2Open(false)}
       >
-        <Form form={form} layout="vertical">
-          <Form.Item
-            name="name"
-            label="Name"
-            rules={[{ required: true, message: "Please enter the name" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="text"
-            label="Text"
-            rules={[{ required: true, message: "Please enter the text" }]}
-          >
-            <Input.TextArea rows={4} />
-          </Form.Item>
-          <Form.Item
-            name="images"
-            label="images"
-            rules={[{ required: true, message: "Please enter the text" }]}
-          >
-            <Input.TextArea rows={4} />
-          </Form.Item>
-        </Form>
+        <p>some contents...</p>
+        <p>some contents...</p>
+        <p>some contents...</p>
       </Modal>
     </div>
   );

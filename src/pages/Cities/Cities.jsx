@@ -62,6 +62,7 @@ const Cities = () => {
       </>
     ),
   }));
+  
   const getData = () => {
     setLoading(true);
     axios
