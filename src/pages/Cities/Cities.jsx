@@ -1,15 +1,14 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { Table } from "antd";
-import styles from "./Cities.module.css";
+import { message, Table, Button, Modal, Form, Input } from "antd";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import style from "./Cities.module.css";
 
-const apiUrl = "https://autoapi.dezinfeksiyatashkent.uz/api/cities";
-
-const InternalTable = ({ rawData }) => {
-  if (!Array.isArray(rawData)) {
-    rawData = [rawData];
-  }
-
-  const hasData = useMemo(() => rawData.some((item) => item), [rawData]);
+const Cities = () => {
+  const [cities, setCities] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [form] = Form.useForm();
+  const [selectedCity, setSelectedCity] = useState(null);
 
   const columns = [
     {
@@ -18,94 +17,168 @@ const InternalTable = ({ rawData }) => {
       key: "name",
     },
     {
-      title: "Title",
-      dataIndex: "title",
-      key: "title",
+      title: "Text",
+      dataIndex: "text",
+      key: "text",
     },
     {
       title: "Images",
-      dataIndex: "img",
-      key: "img",
-      render: () => <input className={styles["download-input"]} type="file" />,
+      dataIndex: "images",
+      key: "images",
     },
     {
-      title: "Delete",
-      key: "delete",
-      render: () => <button className={styles["delete-btn"]}>Delete</button>,
-    },
-    {
-      title: "Updated",
-      key: "updated",
-      render: () => <button className={styles["update-btn"]}>Update</button>,
-    },
-    {
-      title: "Updated",
-      key: "updated",
-      render: () => <button className={styles["update-btn"]}>Update</button>,
+      title: "Actions",
+      dataIndex: "actions",
+      render: (text, record) => (
+        <div className="buttons">
+          <Button type="primary" onClick={() => handleEdit(record)}>
+            Edit
+          </Button>
+          <Button type="dashed" onClick={() => handleDelete(record)}>
+            Delete
+          </Button>
+        </div>
+      ),
     },
   ];
 
-  return (
-    <Table
-      columns={columns}
-      dataSource={rawData}
-      pagination={false}
-      scroll={{ y: 400 }}
-    />
-  );
-};
-
-const Cities = () => {
-  const [data, setData] = useState([]);
+  const getData = () => {
+    setLoading(true);
+    axios
+      .get("https://autoapi.dezinfeksiyatashkent.uz/api/cities")
+      .then((response) => {
+        setCities(response.data.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error getting cities.", error);
+        message.error("Error getting cities.");
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
-    fetchData();
+    getData();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      setData(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  const handleEdit = (record) => {
+    setSelectedCity(record);
+    setVisible(true);
+    form.setFieldsValue(record);
   };
 
-  const handlePostData = async () => {
-    try {
-      const dataToSend = {
-        name: "John Doe",
-        title: "Example Title",
-        img: "https://example.com/image.jpg",
-      };
-      await postData(dataToSend);
-      fetchData();
-    } catch (error) {
-      console.error("Error posting data:", error);
-    }
+  const handleDelete = (record) => {
+    Modal.confirm({
+      title: "Do you want to delete this city?",
+      onOk() {
+        axios
+          .delete(
+            `https://autoapi.dezinfeksiyatashkent.uz/api/cities/${record.id}`
+          )
+          .then(() => {
+            message.success("City deleted successfully");
+            getData();
+          })
+          .catch((error) => {
+            console.error("Error deleting city.", error);
+            message.error("Error deleting city.");
+          });
+      },
+    });
   };
 
-  const postData = async (data) => {
-    try {
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
-      console.log("Response:", result);
-    } catch (error) {
-      console.error("Error posting data:", error);
-      throw error;
-    }
+  const handleAdd = () => {
+    setSelectedCity(null);
+    setVisible(true);
+    form.resetFields();
+  };
+
+  const handleOk = () => {
+    form.validateFields().then((values) => {
+      const formData = new FormData();
+      const name = formData.append(values.name);
+      const text = formData.append(values.tittle);
+      const images = formData.append(values.images);
+      const url = selectedCity
+        ? `https://autoapi.dezinfeksiyatashkent.uz/api/cities/${selectedCity.id}`
+        : "https://autoapi.dezinfeksiyatashkent.uz/api/cities";
+      const method = selectedCity ? "PUT" : "POST";
+
+      axios({
+        url,
+        method,
+        data: formData,
+      })
+        .then(() => {
+          message.success(
+            selectedCity
+              ? "City updated successfully"
+              : "City added successfully"
+          );
+          setVisible(false);
+          form.resetFields();
+          getData();
+        })
+        .catch((error) => {
+          console.error("Error adding/updating city.", error);
+          message.error("Error adding/updating city.");
+        });
+    });
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+    form.resetFields();
   };
 
   return (
-    <div>
-      <InternalTable rawData={data} />
+    <div className={style["add-container"]}>
+      <Button
+        type="primary"
+        className={style["add-btn"]}
+        onClick={handleAdd}
+        style={{ marginBottom: 16 }}
+      >
+        Add City
+      </Button>
+      <div style={{ overflowX: "auto" }}>
+        <Table
+          columns={columns}
+          dataSource={cities}
+          loading={loading}
+          rowKey="id"
+        />
+      </div>
+      <Modal
+        title={selectedCity ? "Edit City" : "Add City"}
+        visible={visible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item
+            name="name"
+            label="Name"
+            rules={[{ required: true, message: "Please enter the name" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="text"
+            label="Text"
+            rules={[{ required: true, message: "Please enter the text" }]}
+          >
+            <Input.TextArea rows={4} />
+          </Form.Item>
+          <Form.Item
+            name="images"
+            label="images"
+            rules={[{ required: true, message: "Please enter the text" }]}
+          >
+            <Input.TextArea rows={4} />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };
