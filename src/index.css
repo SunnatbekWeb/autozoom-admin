@@ -22,6 +22,7 @@ body {
 main {
   height: 100%;
   padding: 30px;
+  overflow-y: scroll;
 }
 
 .main-container {

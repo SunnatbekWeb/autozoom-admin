@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { message, Table, Button, Modal, Form, Input, Upload } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -39,6 +40,7 @@ const Cities = () => {
       key: "action",
     },
   ];
+  
   const dataSourse = cities.map((item, index) => ({
     key: item.id,
     number: index + 1,
@@ -131,6 +133,7 @@ const Cities = () => {
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("text", values.text);
+
       if (values.images && values.images.length > 0) {
         values.images.forEach((image) => {
           if (image && image.originFileObj) {
