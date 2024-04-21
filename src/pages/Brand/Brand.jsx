@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { Button, Input, Modal, Select, Table, Form, Upload } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
