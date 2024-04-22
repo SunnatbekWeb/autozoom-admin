@@ -84,8 +84,8 @@ const Cities = () => {
   const handleEdit = (item) => {
     const imageUrl = `${urlimage}${item.image_src}`;
     setSelectedCity({
-      name: item.name,
-      text: item.text,
+      name: item?.name,
+      text: item?.text,
       images: imageUrl,
     });
 
@@ -128,12 +128,12 @@ const Cities = () => {
     const authToken = localStorage.getItem("access_token");
     form.validateFields().then((values) => {
       const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("text", values.text);
-      if (values.images && values.images.length > 0) {
+      formData.append("name", values?.name);
+      formData.append("text", values?.text);
+      if (values?.images && values?.images?.length > 0) {
         values.images.forEach((image) => {
-          if (image && image.originFileObj) {
-            formData.append("images", image.originFileObj, image.name);
+          if (image && image?.originFileObj) {
+            formData.append("images", image?.originFileObj, image.name);
           }
         });
       }
@@ -183,7 +183,7 @@ const Cities = () => {
     if (Array.isArray(e)) {
       return e;
     }
-    return e && e.fileList;
+    return e && e?.fileList;
   };
 
   return (
