@@ -14,7 +14,7 @@ const Cities = () => {
 
   const columns = [
     {
-      title: "Number",
+      title: "ID",
       dataIndex: "number",
       key: "number",
     },
@@ -39,6 +39,7 @@ const Cities = () => {
       key: "action",
     },
   ];
+  
   const dataSourse = cities.map((item, index) => ({
     key: item.id,
     number: index + 1,
@@ -62,6 +63,7 @@ const Cities = () => {
       </>
     ),
   }));
+  
   const getData = () => {
     setLoading(true);
     axios

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
   const [data, setData] = useState({ phone_number: "", password: "" });

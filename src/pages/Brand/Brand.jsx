@@ -1,200 +1,250 @@
-import { message, Table, Button, Modal, Form, Input } from "antd";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import style from "../Cities/Cities.module.css";
+import { Button, Input, Modal, Select, Table, Form, Upload } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import style from "./Brand.module.css";
+import axios from "axios";
+import { FiEdit } from "react-icons/fi";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { useForm } from "antd/es/form/Form";
+import { ToastContainer, toast } from "react-toastify";
 
 const Brand = () => {
-  const [cities, setCities] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [form] = Form.useForm();
-  const [selectedCity, setSelectedCity] = useState(null);
+  const [bradns, setBrands] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [modalType, setModalType] = useState("");
+  const [form] = useForm();
+  const imageUrl =
+    "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
 
-  const getData = () => {
-    setLoading(true);
+  useEffect(() => {
+    getBrands();
+  }, []);
+
+  const getBrands = () => {
     axios
-      .get("https://autoapi.dezinfeksiyatashkent.uz/api/cities")
+      .get("https://autoapi.dezinfeksiyatashkent.uz/api/brands")
       .then((response) => {
-        setCities(response.data.data);
-        setLoading(false);
+        setBrands(response.data?.data);
       })
       .catch((error) => {
-        console.error("Error getting cities.", error);
-        message.error("Error getting cities.");
-        setLoading(false);
+        toast.error(error.message);
       });
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // Add brand function
+  const handleOk = () => {
+    if (modalType === "add") {
+      form.validateFields().then((values) => {
+        const formData = new FormData();
+        formData.append("images", imageFile);
+        formData.append("title", values.title);
 
-  const handleEdit = (record) => {
-    setSelectedCity(record);
-    setVisible(true);
-    form.setFieldsValue(record);
+        axios
+          .post(
+            "https://autoapi.dezinfeksiyatashkent.uz/api/brands/",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            toast.success("Brand created successfully!");
+            setModalOpen(false);
+            getBrands();
+            form.resetFields();
+          })
+          .catch((error) => {
+            setModalOpen(false);
+            toast.error(error.message);
+            form.resetFields();
+          });
+      });
+    }
   };
 
-  const handleDelete = (record) => {
+  const deleteBrand = (id) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    };
+
     Modal.confirm({
-      title: "Do you want to delete this city?",
+      title: "Do you want to delete this brand?",
       onOk() {
         axios
           .delete(
-            `https://autoapi.dezinfeksiyatashkent.uz/api/cities/${record.id}`
+            `https://autoapi.dezinfeksiyatashkent.uz/api/brands/${id}`,
+            config
           )
           .then(() => {
-            message.success("City deleted successfully");
-            getData();
+            toast.success("Brand deleted successfully!");
+            getBrands();
           })
           .catch((error) => {
-            console.error("Error deleting city.", error);
-            message.error("Error deleting city.");
+            toast.error(error.message);
           });
       },
     });
   };
-
-  const handleAdd = () => {
-    setSelectedCity(null);
-    setVisible(true);
-    form.resetFields();
-  };
-
-  const handleOk = () => {
-    form.validateFields().then((values) => {
-      const formData = new FormData();
-      const name = formData.append(values.name);
-      const text = formData.append(values.tittle);
-      const images = formData.append(values.images);
-      const url = selectedCity
-        ? `https://autoapi.dezinfeksiyatashkent.uz/api/cities/${selectedCity.id}`
-        : "https://autoapi.dezinfeksiyatashkent.uz/api/cities";
-      const method = selectedCity ? "PUT" : "POST";
-
-      axios({
-        url,
-        method,
-        data: formData,
-      })
-        .then(() => {
-          message.success(
-            selectedCity
-              ? "City updated successfully"
-              : "City added successfully"
-          );
-          setVisible(false);
-          form.resetFields();
-          getData();
-        })
-        .catch((error) => {
-          console.error("Error adding/updating city.", error);
-          message.error("Error adding/updating city.");
-        });
-    });
-  };
-
+  // Handle functions
   const handleCancel = () => {
-    setVisible(false);
+    setModalOpen(false);
     form.resetFields();
+  };
+  const handleImageChange = (info) => {
+    if (info.file.status === "done") {
+      setImageFile(info.file.originFileObj);
+    }
   };
 
   const columns = [
     {
-      title: "ID",
-      dataIndex: "key",
-      className: "thead-bg",
-    },
-    {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      className: "thead-bg",
+      render: (text) => <p>{text}</p>,
     },
     {
-      title: "Text",
-      dataIndex: "text",
-      key: "text",
-      className: "thead-bg",
-    },
-    {
-      title: "Images",
+      title: "Image",
       dataIndex: "images",
       key: "images",
-      className: "thead-bg",
     },
     {
       title: (
         <div
+          className="brand-title"
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
           }}
         >
-          <span>Actions</span>
+          <p>Action</p>
           <Button
-            type="primary"
-            className={style["add-btn"]}
-            onClick={handleAdd}
-            style={{ margin: 0 }}
+            onClick={() => {
+              setModalOpen(true), setModalType("add");
+            }}
           >
-            Add City
+            Add brand
           </Button>
         </div>
       ),
-      dataIndex: "actions",
-      render: (text, record) => (
-        <div className="buttons">
-          <Button type="primary" onClick={() => handleEdit(record)}>
-            Edit
-          </Button>
-          <Button type="dashed" onClick={() => handleDelete(record)}>
-            Delete
-          </Button>
-        </div>
-      ),
-      className: "thead-bg",
+      dataIndex: "action",
+      key: "action",
     },
   ];
 
+  const data = bradns.map((item, index) => ({
+    key: index,
+    name: item.title,
+    images: (
+      <img
+        style={{ width: "100px" }}
+        src={`${imageUrl}${item.image_src}`}
+        alt="Brand Logo"
+      />
+    ),
+    action: (
+      <Select
+        placeholder="Action"
+        style={{
+          width: 120,
+        }}
+        options={[
+          {
+            value: "edit",
+            label: (
+              <div
+                onClick={() => setModalType("edit")}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  columnGap: "20px",
+                }}
+              >
+                <FiEdit style={{ fontSize: "16px" }} />
+                Edit
+              </div>
+            ),
+          },
+          {
+            value: "delete",
+            label: (
+              <div
+                onClick={() => deleteBrand(item?.id)}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  columnGap: "20px",
+                }}
+              >
+                <RiDeleteBinLine style={{ fontSize: "16px" }} />
+                Delete
+              </div>
+            ),
+          },
+        ]}
+      />
+    ),
+  }));
+
+  const normFile = (e) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
+
   return (
-    <div className={style["add-container"]}>
-      <div style={{ overflowX: "auto" }}>
-        <Table
-          columns={columns}
-          dataSource={cities}
-          loading={loading}
-          rowKey="id"
-        />
-      </div>
+    <div className={style["brand_header"]}>
+      <Input
+        addonBefore={<SearchOutlined />}
+        style={{ width: "40%", marginBottom: "40px" }}
+        placeholder="large size"
+      />
+      <Table columns={columns} dataSource={data} />
+      <ToastContainer />
       <Modal
-        title={selectedCity ? "Edit City" : "Add City"}
-        visible={visible}
+        title="Vertically centered modal dialog"
+        centered
+        open={modalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
       >
         <Form form={form} layout="vertical">
           <Form.Item
-            name="name"
-            label="Name"
+            label="Brand Name"
+            name="title"
             rules={[{ required: true, message: "Please enter the name" }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            name="text"
-            label="Text"
-            rules={[{ required: true, message: "Please enter the text" }]}
-          >
-            <Input.TextArea rows={4} />
-          </Form.Item>
-          <Form.Item
+            label="Upload Image"
             name="images"
-            label="images"
-            rules={[{ required: true, message: "Please enter the text" }]}
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+            rules={[{ required: true, message: "Please upload an image" }]}
           >
-            <Input.TextArea rows={4} />
+            <Upload
+              customRequest={({ onSuccess }) => {
+                onSuccess("ok");
+              }}
+              onChange={handleImageChange}
+              listType="picture-card"
+            >
+              <div>
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </div>
+            </Upload>
           </Form.Item>
         </Form>
       </Modal>
