@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { TiHome } from "react-icons/ti";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Button, Menu } from "antd";
-import { FaShopify } from "react-icons/fa6";
 import {
-  ContainerOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import Logo from "../../assets/icons/autozoom.svg";
 import "./Sidebar.css";
+import { BsShopWindow } from "react-icons/bs";
+import { HiOutlineNewspaper } from "react-icons/hi";
+import { GrMapLocation } from "react-icons/gr";
+import { BiSolidCity } from "react-icons/bi";
+import { IoCarSportOutline } from "react-icons/io5";
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -62,21 +65,42 @@ const Sidebar = () => {
         Dashboard
       </NavLink>,
       "1",
-      <TiHome />
+      <TiHome style={{ fontSize: "2px" }} />
     ),
     getItem(
       <NavLink to="/brands" onClick={() => handleMenuClick("2")}>
         Brands
       </NavLink>,
       "2",
-      <FaShopify />
+      <BsShopWindow style={{ fontSize: "2px" }} />
     ),
     getItem(
-      <NavLink to="/cities" onClick={() => handleMenuClick("3")}>
-        Cities
+      <NavLink to="/models" onClick={() => handleMenuClick("3")}>
+        Models
       </NavLink>,
       "3",
-      <ContainerOutlined />
+      <HiOutlineNewspaper style={{ fontSize: "2px" }} />
+    ),
+    getItem(
+      <NavLink to="/locations" onClick={() => handleMenuClick("4")}>
+        Locations
+      </NavLink>,
+      "4",
+      <GrMapLocation style={{ fontSize: "2px" }} />
+    ),
+    getItem(
+      <NavLink to="/cities" onClick={() => handleMenuClick("5")}>
+        Cities
+      </NavLink>,
+      "5",
+      <BiSolidCity style={{ fontSize: "2px" }} />
+    ),
+    getItem(
+      <NavLink to="/cars" onClick={() => handleMenuClick("6")}>
+        Cars
+      </NavLink>,
+      "6",
+      <IoCarSportOutline style={{ fontSize: "2px" }} />
     ),
   ];
 
