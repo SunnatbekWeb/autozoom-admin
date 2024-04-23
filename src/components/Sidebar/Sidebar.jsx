@@ -61,46 +61,46 @@ const Sidebar = () => {
       "0"
     ),
     getItem(
-      <NavLink to="/" onClick={() => handleMenuClick("1")}>
+      <NavLink to="/" style={{fontSize:16, fontWeight:600}} onClick={() => handleMenuClick("1")}>
         Dashboard
       </NavLink>,
       "1",
-      <TiHome style={{ fontSize: "2px" }} />
+      <TiHome style={{ fontSize: "20px" }} />
     ),
     getItem(
-      <NavLink to="/brands" onClick={() => handleMenuClick("2")}>
+      <NavLink to="/brands" style={{fontSize:16, fontWeight:600}} onClick={() => handleMenuClick("2")}>
         Brands
       </NavLink>,
       "2",
-      <BsShopWindow style={{ fontSize: "2px" }} />
+      <BsShopWindow style={{ fontSize: "20px" }} />
     ),
     getItem(
-      <NavLink to="/models" onClick={() => handleMenuClick("3")}>
+      <NavLink to="/models" style={{fontSize:16, fontWeight:600}} onClick={() => handleMenuClick("3")}>
         Models
       </NavLink>,
       "3",
-      <HiOutlineNewspaper style={{ fontSize: "2px" }} />
+      <HiOutlineNewspaper style={{ fontSize: "20px" }} />
     ),
     getItem(
-      <NavLink to="/locations" onClick={() => handleMenuClick("4")}>
+      <NavLink to="/locations" style={{fontSize:16, fontWeight:600}} onClick={() => handleMenuClick("4")}>
         Locations
       </NavLink>,
       "4",
-      <GrMapLocation style={{ fontSize: "2px" }} />
+      <GrMapLocation style={{ fontSize: "20px" }} />
     ),
     getItem(
-      <NavLink to="/cities" onClick={() => handleMenuClick("5")}>
+      <NavLink to="/cities" style={{fontSize:16, fontWeight:600}} onClick={() => handleMenuClick("5")}>
         Cities
       </NavLink>,
       "5",
-      <BiSolidCity style={{ fontSize: "2px" }} />
+      <BiSolidCity style={{ fontSize: "20px" }} />
     ),
     getItem(
-      <NavLink to="/cars" onClick={() => handleMenuClick("6")}>
+      <NavLink to="/cars" style={{fontSize:16, fontWeight:600}} onClick={() => handleMenuClick("6")}>
         Cars
       </NavLink>,
       "6",
-      <IoCarSportOutline style={{ fontSize: "2px" }} />
+      <IoCarSportOutline style={{ fontSize: "20px" }} />
     ),
   ];
 

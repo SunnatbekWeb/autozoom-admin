@@ -6,9 +6,9 @@ import Dashborad from "../pages/Dashboard/Dashborad";
 import Login from "../pages/Auth/Login";
 import Brand from "../pages/Brands/Brand";
 import Cities from "../pages/Cities/Cities";
-import Model from "../pages/Models/Model";
 import Locations from "./../pages/Locations/Locations";
 import Cars from "./../pages/Cars/Cars";
+import Models from "../pages/Models/Model";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/models",
-        element: <Model />,
+        element: <Models />,
       },
       {
         path: "/locations",
