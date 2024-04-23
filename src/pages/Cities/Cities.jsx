@@ -86,6 +86,7 @@ const Cities = () => {
   const handleEdit = (item) => {
     const imageUrl = `${urlimage}${item.image_src}`;
     setSelectedCity({
+      id: item?.id,
       name: item?.name,
       text: item?.text,
       images: imageUrl,

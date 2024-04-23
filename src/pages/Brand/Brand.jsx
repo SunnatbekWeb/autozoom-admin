@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input, Modal, Select, Table, Form, Upload } from "antd";
+import { Button, Input, Modal, Table, Form, Upload } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import style from "./Brand.module.css";
 import axios from "axios";
@@ -7,33 +7,36 @@ import { useForm } from "antd/es/form/Form";
 import { ToastContainer, toast } from "react-toastify";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
-import Loader from "./../../components/Ui/Loader/Loader";
 
 const Brand = () => {
   const [bradns, setBrands] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [imageFile, setImageFile] = useState(null);
+  const [selectedBrand, setSelectedBrand] = useState("");
   const [modalType, setModalType] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadings, setLoadings] = useState(false);
   const [form] = useForm();
   const imageUrl =
     "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
 
-  useEffect(() => {
-    getBrands();
-    setLoading(false);
-  }, []);
-
   const getBrands = () => {
+    setLoading(true);
     axios
       .get("https://autoapi.dezinfeksiyatashkent.uz/api/brands")
       .then((response) => {
         setBrands(response.data?.data);
+        setLoading(false);
       })
       .catch((error) => {
         toast.error(error.message);
+        setLoading(false);
       });
   };
+
+  useEffect(() => {
+    getBrands();
+  }, []);
 
   // Add brand function
   const handleOk = () => {
@@ -42,7 +45,7 @@ const Brand = () => {
         const formData = new FormData();
         formData.append("images", imageFile);
         formData.append("title", values.title);
-        setLoading(true);
+        setLoadings(true);
         axios
           .post(
             "https://autoapi.dezinfeksiyatashkent.uz/api/brands/",
@@ -54,21 +57,61 @@ const Brand = () => {
               },
             }
           )
-          .then((res) => {
+          .then(() => {
+            setLoadings(false);
             setModalOpen(false);
-            setLoading(false);
             toast.success("Brand created successfully!");
             getBrands();
             form.resetFields();
           })
           .catch((error) => {
-            setLoading(false);
+            setLoadings(false);
             setModalOpen(false);
             toast.error(error.message);
             form.resetFields();
           });
       });
+    } else if (modalType === "edit") {
+      form.validateFields().then((values) => {
+        const formData = new FormData();
+        formData.append("images", imageFile);
+        formData.append("title", values?.title);
+        setLoadings(true);
+        axios
+          .put(
+            `https://autoapi.dezinfeksiyatashkent.uz/api/brands/${selectedBrand.id}`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+              },
+            }
+          )
+          .then(() => {
+            getBrands();
+            setLoadings(false);
+            setModalOpen(false);
+            toast.success("Brands updated successfully!");
+          })
+          .catch((err) => {
+            setLoadings(false);
+            setModalOpen(false);
+            toast.error(err.message);
+          });
+      });
     }
+  };
+
+  const handleEdit = (item) => {
+    const image = `${imageUrl}${item.image_src}`;
+    setSelectedBrand({
+      id: item?.id,
+      title: item?.title,
+      images: image,
+    });
+
+    form.setFieldsValue(item);
   };
 
   const deleteBrand = (id) => {
@@ -110,6 +153,7 @@ const Brand = () => {
     }
   };
 
+  // Table columns
   const columns = [
     {
       title: "Name",
@@ -147,8 +191,9 @@ const Brand = () => {
       key: "action",
     },
   ];
-
+  // Table data
   const data = bradns.map((item, index) => ({
+    loading: true,
     key: index,
     name: item.title,
     images: (
@@ -164,7 +209,7 @@ const Brand = () => {
           <Button
             type="primary"
             onClick={() => {
-              setModalOpen(true), setModalType("edit");
+              setModalOpen(true), setModalType("edit"), handleEdit(item);
             }}
           >
             <FaEdit style={{ fontSize: "20px" }} />
@@ -188,13 +233,12 @@ const Brand = () => {
 
   return (
     <div className={style["brand_header"]}>
-      {loading && <Loader />}
       <Input
         addonBefore={<SearchOutlined />}
         style={{ width: "40%", marginBottom: "40px" }}
         placeholder="large size"
       />
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} loading={loading} dataSource={data} />
       <ToastContainer />
       <Modal
         title="Vertically centered modal dialog"
@@ -202,6 +246,7 @@ const Brand = () => {
         open={modalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        confirmLoading={loadings}
       >
         <Form form={form} layout="vertical">
           <Form.Item
@@ -235,5 +280,4 @@ const Brand = () => {
     </div>
   );
 };
-
 export default Brand;

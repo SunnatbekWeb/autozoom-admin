@@ -1,50 +1,110 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TiHome } from "react-icons/ti";
 import { NavLink, useLocation } from "react-router-dom";
-
-import { Menu } from "antd";
-
-import "./Sidebar.css";
+import { Button, Menu } from "antd";
 import { FaShopify } from "react-icons/fa6";
-import MenuItem from "antd/es/menu/MenuItem";
+import {
+  ContainerOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+} from "@ant-design/icons";
+import Logo from "../../assets/icons/autozoom.svg";
+import "./Sidebar.css";
 
 const Sidebar = () => {
-  const location = useLocation();
+  const [collapsed, setCollapsed] = useState(false);
+  const [activeTab, setActiveTab] = useState("1");
+
+  useEffect(() => {
+    const storedActiveTab = localStorage.getItem("activeTab");
+    if (storedActiveTab) {
+      setActiveTab(storedActiveTab);
+    }
+  }, []);
+
+  const handleMenuClick = (key) => {
+    setActiveTab(key);
+    localStorage.setItem("activeTab", key);
+  };
+
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
+
+  function getItem(label, key, icon, children, type) {
+    return {
+      key,
+      icon,
+      children,
+      label,
+      type,
+    };
+  }
+  const items = [
+    getItem(
+      <div className="logo">
+        <NavLink to="/" onClick={() => handleMenuClick("0")}>
+          {collapsed ? (
+            <img
+              src={Logo}
+              style={{ width: "50px", height: "50px" }}
+              alt="Avtozoom logo"
+            />
+          ) : (
+            "AvtozoomAdmin"
+          )}
+        </NavLink>
+      </div>,
+      "0"
+    ),
+    getItem(
+      <NavLink to="/" onClick={() => handleMenuClick("1")}>
+        Dashboard
+      </NavLink>,
+      "1",
+      <TiHome />
+    ),
+    getItem(
+      <NavLink to="/brands" onClick={() => handleMenuClick("2")}>
+        Brands
+      </NavLink>,
+      "2",
+      <FaShopify />
+    ),
+    getItem(
+      <NavLink to="/cities" onClick={() => handleMenuClick("3")}>
+        Cities
+      </NavLink>,
+      "3",
+      <ContainerOutlined />
+    ),
+  ];
 
   return (
     <>
+      <Button
+        type="primary"
+        onClick={toggleCollapsed}
+        style={{
+          marginBottom: 16,
+          position: "absolute",
+          top: 16,
+          left: `${collapsed ? "120px" : "275px"}`,
+          zIndex: 999,
+          transition: "0.1s",
+        }}
+      >
+        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+      </Button>
       <Menu
-        style={{ width: 256, borderRight: "1px solid #001f2c" }}
+        selectedKeys={[activeTab]}
         defaultOpenKeys={["sub1"]}
         mode="inline"
         theme="dark"
-        selectedKeys={[location.pathname]}
-      >
-        <MenuItem style={{ height: "80px" }}>
-          <NavLink to="/">AutozoomAdmin</NavLink>
-        </MenuItem>
-        <Menu.Item key="/" icon={<TiHome style={{ fontSize: "20px" }} />}>
-          <NavLink to="/" rel="noopener noreferrer">
-            Dashboard
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item
-          key="/brands"
-          icon={<FaShopify style={{ fontSize: "20px" }} />}
-        >
-          <NavLink to="/brands" rel="noopener noreferrer">
-            Brands
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item
-          key="/cities"
-          icon={<FaShopify style={{ fontSize: "20px" }} />}
-        >
-          <NavLink to="/cities" rel="noopener noreferrer">
-            Cities
-          </NavLink>
-        </Menu.Item>
-      </Menu>
+        inlineCollapsed={collapsed}
+        items={items}
+        style={{ height: "90vh" }}
+      />
     </>
   );
 };
