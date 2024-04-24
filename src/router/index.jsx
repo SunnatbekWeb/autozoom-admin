@@ -9,6 +9,7 @@ import Cities from "../pages/Cities/Cities";
 import Locations from "./../pages/Locations/Locations";
 import Cars from "./../pages/Cars/Cars";
 import Models from "../pages/Models/Model";
+import Settings from "../pages/Settings/Settings";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/brands",
         element: <Brand />,
+      },
+      {
+        path: "/settings",
+        element: <Settings />,
       },
       {
         path: "/models",
