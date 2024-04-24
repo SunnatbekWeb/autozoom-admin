@@ -39,7 +39,7 @@ const Cities = () => {
       key: "action",
     },
   ];
-  
+
   const dataSourse = cities.map((item, index) => ({
     key: item.id,
     number: index + 1,
@@ -63,7 +63,7 @@ const Cities = () => {
       </>
     ),
   }));
-  
+
   const getData = () => {
     setLoading(true);
     axios
@@ -239,6 +239,7 @@ const Cities = () => {
               customRequest={({ onSuccess }) => {
                 onSuccess("ok");
               }}
+              maxCount={1}
               beforeUpload={beforeUpload}
               listType="picture-card"
             >

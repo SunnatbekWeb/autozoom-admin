@@ -58,10 +58,10 @@ const Brand = () => {
             }
           )
           .then(() => {
+            getBrands();
             setLoadings(false);
             setModalOpen(false);
             toast.success("Brand created successfully!");
-            getBrands();
             form.resetFields();
           })
           .catch((error) => {
@@ -93,11 +93,13 @@ const Brand = () => {
             setLoadings(false);
             setModalOpen(false);
             toast.success("Brands updated successfully!");
+            form.resetFields();
           })
           .catch((err) => {
             setLoadings(false);
             setModalOpen(false);
             toast.error(err.message);
+            form.resetFields();
           });
       });
     }
@@ -267,6 +269,7 @@ const Brand = () => {
               customRequest={({ onSuccess }) => {
                 onSuccess("ok");
               }}
+              maxCount={1}
               onChange={handleImageChange}
               listType="picture-card"
             >

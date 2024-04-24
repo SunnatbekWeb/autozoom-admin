@@ -13,7 +13,7 @@ const Models = () => {
   const [models, setModels] = useState([]);
   const [brands, setBrands] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedModel, setSelectedModel] = useState("");
   const [modalType, setModalType] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadings, setLoadings] = useState(false);
@@ -95,7 +95,7 @@ const Models = () => {
         setLoadings(true);
         axios
           .put(
-            `https://autoapi.dezinfeksiyatashkent.uz/api/brands/${selectedBrand.id}`,
+            `https://autoapi.dezinfeksiyatashkent.uz/api/models/${selectedModel.id}`,
             formData,
             {
               headers: {
@@ -120,11 +120,10 @@ const Models = () => {
   };
 
   const handleEdit = (item) => {
-    const image = `${imageUrl}${item.image_src}`;
-    setSelectedBrand({
+    setSelectedModel({
       id: item?.id,
-      title: item?.title,
-      images: image,
+      title: item?.name,
+      
     });
 
     form.setFieldsValue(item);
