@@ -7,6 +7,7 @@ import { useForm } from "antd/es/form/Form";
 import { ToastContainer, toast } from "react-toastify";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const Brand = () => {
   const [bradns, setBrands] = useState([]);
@@ -16,6 +17,7 @@ const Brand = () => {
   const [modalType, setModalType] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadings, setLoadings] = useState(false);
+  const navigate = useNavigate();
   const [form] = useForm();
   const imageUrl =
     "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
@@ -35,6 +37,7 @@ const Brand = () => {
   };
 
   useEffect(() => {
+    localStorage.getItem("access_token") ? "" : navigate("/login");
     getBrands();
   }, []);
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { TiHome } from "react-icons/ti";
 import { NavLink, Link } from "react-router-dom";
@@ -72,7 +71,7 @@ const Sidebar = () => {
       <NavLink
         to="/brands"
         style={{ fontSize: 16, fontWeight: 600 }}
-        onClick={() => handleMenuClick("3")}
+        onClick={() => handleMenuClick("2")}
       >
         Brands
       </NavLink>,

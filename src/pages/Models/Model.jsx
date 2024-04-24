@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import "./Model.css";
+import { useNavigate } from "react-router-dom";
 
 const Models = () => {
   const [models, setModels] = useState([]);
@@ -18,8 +19,7 @@ const Models = () => {
   const [loading, setLoading] = useState(true);
   const [loadings, setLoadings] = useState(false);
   const [form] = useForm();
-  const imageUrl =
-    "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
+  const navigate = useNavigate();
 
   const getModels = () => {
     setLoading(true);
@@ -35,6 +35,7 @@ const Models = () => {
       });
   };
 
+  // Get brands function
   const getBrands = () => {
     setLoading(true);
     axios
@@ -50,6 +51,7 @@ const Models = () => {
   };
 
   useEffect(() => {
+    localStorage.getItem("access_token") ? "" : navigate("/login");
     getModels();
     getBrands();
   }, []);
@@ -123,7 +125,6 @@ const Models = () => {
     setSelectedModel({
       id: item?.id,
       title: item?.name,
-      
     });
 
     form.setFieldsValue(item);
@@ -261,7 +262,11 @@ const Models = () => {
           >
             <Select defaultValue={"Select Brand"} style={{ width: 120 }}>
               {brands.map((brand, index) => {
-                return <Select.Option key={index} value={brand.id}>{brand.title}</Select.Option>
+                return (
+                  <Select.Option key={index} value={brand.id}>
+                    {brand.title}
+                  </Select.Option>
+                );
               })}
             </Select>
           </Form.Item>

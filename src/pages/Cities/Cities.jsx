@@ -2,6 +2,7 @@ import { message, Table, Button, Modal, Form, Input, Upload } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import style from "./Cities.module.css";
+import { useNavigate } from "react-router-dom";
 
 const Cities = () => {
   const [cities, setCities] = useState([]);
@@ -9,6 +10,7 @@ const Cities = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [selectedCity, setSelectedCity] = useState(null);
+  const navigate = useNavigate();
   const urlimage =
     "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
 
@@ -80,6 +82,7 @@ const Cities = () => {
   };
 
   useEffect(() => {
+    localStorage.getItem("access_token") ? "" : navigate("/login");
     getData();
   }, []);
 
