@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TiHome } from "react-icons/ti";
 import { NavLink } from "react-router-dom";
 import { Button, Menu } from "antd";
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-} from "@ant-design/icons";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import Logo from "../../assets/icons/autozoom.svg";
 import "./Sidebar.css";
 import { BsShopWindow } from "react-icons/bs";
@@ -61,45 +58,80 @@ const Sidebar = () => {
       "0"
     ),
     getItem(
-      <NavLink to="/" style={{fontSize:16, fontWeight:600}} onClick={() => handleMenuClick("1")}>
+      <NavLink
+        to="/"
+        style={{ fontSize: 16, fontWeight: 600 }}
+        onClick={() => handleMenuClick("1")}
+      >
         Dashboard
       </NavLink>,
       "1",
       <TiHome style={{ fontSize: "20px" }} />
     ),
     getItem(
-      <NavLink to="/brands" style={{fontSize:16, fontWeight:600}} onClick={() => handleMenuClick("2")}>
-        Brands
+      <NavLink
+        to="/settings"
+        style={{ fontSize: 16, fontWeight: 600 }}
+        onClick={() => handleMenuClick("2")}
+      >
+        Settings
       </NavLink>,
       "2",
+      <TiHome style={{ fontSize: "20px" }} />
+    ),
+    getItem(
+      <NavLink
+        to="/brands"
+        style={{ fontSize: 16, fontWeight: 600 }}
+        onClick={() => handleMenuClick("3")}
+      >
+        Brands
+      </NavLink>,
+      "3",
       <BsShopWindow style={{ fontSize: "20px" }} />
     ),
     getItem(
-      <NavLink to="/models" style={{fontSize:16, fontWeight:600}} onClick={() => handleMenuClick("3")}>
+      <NavLink
+        to="/models"
+        style={{ fontSize: 16, fontWeight: 600 }}
+        onClick={() => handleMenuClick("4")}
+      >
         Models
       </NavLink>,
-      "3",
+      "4",
       <HiOutlineNewspaper style={{ fontSize: "20px" }} />
     ),
     getItem(
-      <NavLink to="/locations" style={{fontSize:16, fontWeight:600}} onClick={() => handleMenuClick("4")}>
+      <NavLink
+        to="/locations"
+        style={{ fontSize: 16, fontWeight: 600 }}
+        onClick={() => handleMenuClick("5")}
+      >
         Locations
       </NavLink>,
-      "4",
+      "5",
       <GrMapLocation style={{ fontSize: "20px" }} />
     ),
     getItem(
-      <NavLink to="/cities" style={{fontSize:16, fontWeight:600}} onClick={() => handleMenuClick("5")}>
+      <NavLink
+        to="/cities"
+        style={{ fontSize: 16, fontWeight: 600 }}
+        onClick={() => handleMenuClick("6")}
+      >
         Cities
       </NavLink>,
-      "5",
+      "6",
       <BiSolidCity style={{ fontSize: "20px" }} />
     ),
     getItem(
-      <NavLink to="/cars" style={{fontSize:16, fontWeight:600}} onClick={() => handleMenuClick("6")}>
+      <NavLink
+        to="/cars"
+        style={{ fontSize: 16, fontWeight: 600 }}
+        onClick={() => handleMenuClick("7")}
+      >
         Cars
       </NavLink>,
-      "6",
+      "7",
       <IoCarSportOutline style={{ fontSize: "20px" }} />
     ),
   ];
