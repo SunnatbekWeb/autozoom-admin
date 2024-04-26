@@ -45,7 +45,17 @@ const Cars = () => {
         const formData = new FormData();
         formData.append("brand_id", values.brand_id);
         formData.append("model_id", values?.model_id);
-        formData.append("city_id", values.city_id);
+        formData.append("city_id", values?.city_id);
+        formData.append("color", values?.color);
+        formData.append("year", values?.year);
+        formData.append("seconds", values?.seconds);
+        formData.append("category_id", values?.category_id);
+        formData.append("max_speed", values?.max_speed);
+        formData.append("max_people", values?.max_people);
+        formData.append("transmission", values?.transmission);
+        formData.append("motor", values?.motor);
+        formData.append("drive_side", values?.drive_side);
+        formData.append("petrol", values?.petrol);
         if (values?.images && values?.images?.length > 0) {
           values.images.forEach((image) => {
             if (image && image?.originFileObj) {
@@ -83,15 +93,19 @@ const Cars = () => {
       form.validateFields().then((values) => {
         const formData = new FormData();
         formData.append("brand_id", values.brand_id);
-        formData.append("model_id", values.model_id);
-        formData.append("city_id", values.city_id);
-        if (values?.images && values?.images?.length > 0) {
-          values.images.forEach((image) => {
-            if (image && image?.originFileObj) {
-              formData.append("images", image?.originFileObj, image.name);
-            }
-          });
-        }
+        formData.append("model_id", values?.model_id);
+        formData.append("city_id", values?.city_id);
+        formData.append("color", values?.color);
+        formData.append("year", values?.year);
+        formData.append("seconds", values?.seconds);
+        formData.append("category_id", values?.category_id);
+        formData.append("max_speed", values?.max_speed);
+        formData.append("max_people", values?.max_people);
+        formData.append("transmission", values?.transmission);
+        formData.append("motor", values?.motor);
+        formData.append("drive_side", values?.drive_side);
+        formData.append("petrol", values?.petrol);
+
         setLoadings(true);
         axios
           .put(
@@ -174,8 +188,8 @@ const Cars = () => {
   const columns = [
     {
       title: "brend",
-      dataIndex: "brend_id",
-      key: "brend_id",
+      dataIndex: "brand_id",
+      key: "brand_id",
       render: (text) => <p>{text}</p>,
     },
     {
@@ -190,11 +204,7 @@ const Cars = () => {
       key: "city_id",
       render: (text) => <p>{text}</p>,
     },
-    {
-      title: "Image",
-      dataIndex: "images",
-      key: "images",
-    },
+
     {
       title: (
         <div
@@ -224,9 +234,9 @@ const Cars = () => {
   const data = categories.map((item, index) => ({
     loading: true,
     key: index,
-    //model_id: model_id,
-    brend_id: brend_id,
-    city_id: city_id,
+    model_id: item.model_id,
+    brand_id: item.brand_id,
+    city_id: item.city_id,
     images: (
       <img
         style={{ width: "100px" }}
