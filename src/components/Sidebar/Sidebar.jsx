@@ -10,6 +10,7 @@ import { HiOutlineNewspaper } from "react-icons/hi";
 import { GrMapLocation } from "react-icons/gr";
 import { BiSolidCity } from "react-icons/bi";
 import { IoCarSportOutline } from "react-icons/io5";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -77,7 +78,7 @@ const Sidebar = () => {
         Settings
       </NavLink>,
       "2",
-      <TiHome style={{ fontSize: "20px" }} />
+      <IoSettingsOutline style={{ fontSize: "20px" }} />
     ),
     getItem(
       <NavLink
