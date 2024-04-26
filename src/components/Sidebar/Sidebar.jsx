@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TiHome } from "react-icons/ti";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { Button, Menu } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import Logo from "../../assets/icons/autozoom.svg";
@@ -44,7 +44,7 @@ const Sidebar = () => {
   const items = [
     getItem(
       <div className="logo">
-        <NavLink to="/" onClick={() => handleMenuClick("0")}>
+        <Link to="/" onClick={() => handleMenuClick("0")}>
           {collapsed ? (
             <img
               src={Logo}
@@ -54,9 +54,8 @@ const Sidebar = () => {
           ) : (
             "AvtozoomAdmin"
           )}
-        </NavLink>
+        </Link>
       </div>,
-      "0"
     ),
     getItem(
       <NavLink
@@ -84,55 +83,56 @@ const Sidebar = () => {
       <NavLink
         to="/brands"
         style={{ fontSize: 16, fontWeight: 600 }}
-        onClick={() => handleMenuClick("3")}
+        onClick={() => handleMenuClick("2")}
       >
         Brands
       </NavLink>,
-      "3",
+      "2",
       <BsShopWindow style={{ fontSize: "20px" }} />
     ),
     getItem(
       <NavLink
         to="/models"
         style={{ fontSize: 16, fontWeight: 600 }}
-        onClick={() => handleMenuClick("4")}
+        onClick={() => handleMenuClick("3")}
       >
         Models
       </NavLink>,
-      "4",
+      "3",
       <HiOutlineNewspaper style={{ fontSize: "20px" }} />
     ),
     getItem(
       <NavLink
         to="/locations"
         style={{ fontSize: 16, fontWeight: 600 }}
-        onClick={() => handleMenuClick("5")}
+        onClick={() => handleMenuClick("4")}
+
       >
         Locations
       </NavLink>,
-      "5",
+      "4",
       <GrMapLocation style={{ fontSize: "20px" }} />
     ),
     getItem(
       <NavLink
         to="/cities"
         style={{ fontSize: 16, fontWeight: 600 }}
-        onClick={() => handleMenuClick("6")}
+        onClick={() => handleMenuClick("5")}
       >
         Cities
       </NavLink>,
-      "6",
+      "5",
       <BiSolidCity style={{ fontSize: "20px" }} />
     ),
     getItem(
       <NavLink
         to="/cars"
         style={{ fontSize: 16, fontWeight: 600 }}
-        onClick={() => handleMenuClick("7")}
+        onClick={() => handleMenuClick("6")}
       >
         Cars
       </NavLink>,
-      "7",
+      "6",
       <IoCarSportOutline style={{ fontSize: "20px" }} />
     ),
   ];
@@ -155,7 +155,6 @@ const Sidebar = () => {
       </Button>
       <Menu
         selectedKeys={[activeTab]}
-        defaultOpenKeys={["sub1"]}
         mode="inline"
         theme="dark"
         inlineCollapsed={collapsed}
