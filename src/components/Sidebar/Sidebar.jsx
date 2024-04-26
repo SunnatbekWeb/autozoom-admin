@@ -55,7 +55,7 @@ const Sidebar = () => {
             "AvtozoomAdmin"
           )}
         </Link>
-      </div>,
+      </div>
     ),
     getItem(
       <NavLink
@@ -70,11 +70,10 @@ const Sidebar = () => {
     ),
     getItem(
       <NavLink
-        to="/brands"
+        to="/settings"
         style={{ fontSize: 16, fontWeight: 600 }}
         onClick={() => handleMenuClick("2")}
       >
-<<<<<<< HEAD
         Settings
       </NavLink>,
       "2",
@@ -86,56 +85,53 @@ const Sidebar = () => {
         style={{ fontSize: 16, fontWeight: 600 }}
         onClick={() => handleMenuClick("3")}
       >
-=======
->>>>>>> ee78c2148454b601fa969b1608f78b56e620447c
         Brands
       </NavLink>,
-      "2",
+      "3",
       <BsShopWindow style={{ fontSize: "20px" }} />
     ),
     getItem(
       <NavLink
         to="/models"
         style={{ fontSize: 16, fontWeight: 600 }}
-        onClick={() => handleMenuClick("3")}
+        onClick={() => handleMenuClick("4")}
       >
         Models
       </NavLink>,
-      "3",
+      "4",
       <HiOutlineNewspaper style={{ fontSize: "20px" }} />
     ),
     getItem(
       <NavLink
         to="/locations"
         style={{ fontSize: 16, fontWeight: 600 }}
-        onClick={() => handleMenuClick("4")}
-
+        onClick={() => handleMenuClick("5")}
       >
         Locations
       </NavLink>,
-      "4",
+      "5",
       <GrMapLocation style={{ fontSize: "20px" }} />
     ),
     getItem(
       <NavLink
         to="/cities"
         style={{ fontSize: 16, fontWeight: 600 }}
-        onClick={() => handleMenuClick("5")}
+        onClick={() => handleMenuClick("6")}
       >
         Cities
       </NavLink>,
-      "5",
+      "6",
       <BiSolidCity style={{ fontSize: "20px" }} />
     ),
     getItem(
       <NavLink
         to="/cars"
         style={{ fontSize: 16, fontWeight: 600 }}
-        onClick={() => handleMenuClick("6")}
+        onClick={() => handleMenuClick("7")}
       >
         Cars
       </NavLink>,
-      "6",
+      "7",
       <IoCarSportOutline style={{ fontSize: "20px" }} />
     ),
   ];
