@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import { Button, Input, Modal, Table, Form, Upload } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
@@ -18,6 +19,19 @@ const Cars = () => {
   const [form] = useForm();
   const imageUrl =
     "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
+=======
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+const Cars = () => {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    localStorage.getItem("access_token") ? "" : navigate("/login");
+  }, []);
+  return <div>Cars</div>;
+};
+>>>>>>> ee78c2148454b601fa969b1608f78b56e620447c
 
   const getCategories = () => {
     setLoading(true);

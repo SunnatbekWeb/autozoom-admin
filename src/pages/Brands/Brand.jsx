@@ -7,6 +7,7 @@ import { useForm } from "antd/es/form/Form";
 import { ToastContainer, toast } from "react-toastify";
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const Brand = () => {
   const [bradns, setBrands] = useState([]);
@@ -16,6 +17,7 @@ const Brand = () => {
   const [modalType, setModalType] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadings, setLoadings] = useState(false);
+  const navigate = useNavigate();
   const [form] = useForm();
   const imageUrl =
     "https://autoapi.dezinfeksiyatashkent.uz/api/uploads/images/";
@@ -35,6 +37,7 @@ const Brand = () => {
   };
 
   useEffect(() => {
+    localStorage.getItem("access_token") ? "" : navigate("/login");
     getBrands();
   }, []);
 
@@ -58,10 +61,10 @@ const Brand = () => {
             }
           )
           .then(() => {
+            getBrands();
             setLoadings(false);
             setModalOpen(false);
             toast.success("Brand created successfully!");
-            getBrands();
             form.resetFields();
           })
           .catch((error) => {
@@ -93,11 +96,13 @@ const Brand = () => {
             setLoadings(false);
             setModalOpen(false);
             toast.success("Brands updated successfully!");
+            form.resetFields();
           })
           .catch((err) => {
             setLoadings(false);
             setModalOpen(false);
             toast.error(err.message);
+            form.resetFields();
           });
       });
     }
@@ -267,6 +272,7 @@ const Brand = () => {
               customRequest={({ onSuccess }) => {
                 onSuccess("ok");
               }}
+              maxCount={1}
               onChange={handleImageChange}
               listType="picture-card"
             >
