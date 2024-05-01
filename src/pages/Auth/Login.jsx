@@ -4,10 +4,11 @@ import { CiUser } from "react-icons/ci";
 import { RiLockPasswordLine } from "react-icons/ri";
 
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
   const [data, setData] = useState({ phone_number: "", password: "" });
-  const [error, setError] = useState(null);
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -29,30 +30,33 @@ function Login() {
       const responseData = await response.json();
       localStorage.setItem(
         "access_token",
-        responseData.data?.tokens?.accessToken?.token
+        responseData?.data?.tokens?.accessToken?.token
       );
-      navigate("/");
+      localStorage.setItem("userName", responseData?.data?.user?.firstName);
+      toast.success("You are logged in successfully!");
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     } catch (error) {
-      setError(error.message);
+      toast.error(error?.message);
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className={styles["form-container"]}>
-      <div className="login_input">
-        <CiUser style={{color: 'gray', position: 'absolute', top: '83px', left: '40px', fontSize: '19px'}}/>
+      <div style={{position: 'relative'}}>
+        <CiUser style={{position: 'absolute', top: '28px', left: '10px'}}/>
         <input
           type="text"
           name="phoneNumber"
           value={data.phone_number}
           onChange={(e) => setData({ ...data, phone_number: e.target.value })}
           className={styles["input-field"]}
-          placeholder={"Phone Number"}
+          placeholder="Phone Number"
         />
       </div>
-
-      <div className="login_input">
-      <RiLockPasswordLine style={{color: 'gray', position: 'absolute', top: '143px', left: '40px', fontSize: '19px'}}/>
+      <div style={{position: 'relative'}}>
+        <RiLockPasswordLine style={{position: 'absolute', top: '28px', left: '10px', color: 'gray'}}/>
         <input
           type="password"
           name="password"
