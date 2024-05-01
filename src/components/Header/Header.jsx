@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegUser } from "react-icons/fa6";
-
 import "./Header.css";
-import { Dropdown, message } from "antd";
+import {  Dropdown, message } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const [collapsed, setCollapsed] = useState(false);
+
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
+
   const navigate = useNavigate();
 
   const logOutFunc = () => {
